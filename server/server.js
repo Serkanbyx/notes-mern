@@ -5,6 +5,7 @@ const hpp = require("hpp");
 require("dotenv").config();
 
 const connectDB = require("./config/db");
+const authRoutes = require("./routes/authRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -56,7 +57,7 @@ app.use((req, _res, next) => {
 });
 
 // ── Routes ───────────────────────────────────────────────────────────
-// app.use("/api/auth", authRoutes);   — Adım 3'te eklenecek
+app.use("/api/auth", authRoutes);
 // app.use("/api/notes", noteRoutes);  — Adım 4'te eklenecek
 
 // ── Welcome Page ────────────────────────────────────────────────────
