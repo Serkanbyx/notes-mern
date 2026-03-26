@@ -1,5 +1,8 @@
 # Notes MERN App
 
+[![Created by Serkanby](https://img.shields.io/badge/Created%20by-Serkanby-blue?style=flat-square)](https://serkanbayraktar.com/)
+[![GitHub](https://img.shields.io/badge/GitHub-Serkanbyx-181717?style=flat-square&logo=github)](https://github.com/Serkanbyx)
+
 A full-stack notes application built with the **MERN** stack. Users can register, log in, and manage personal notes with a rich text editor, color coding, pinning, and instant search — all wrapped in a clean, minimal UI.
 
 <p align="center">
@@ -371,6 +374,16 @@ This project is open source and available under the [MIT License](https://openso
 
 ---
 
-<p align="center">
-  Created by <a href="https://serkanbayraktar.com/">Serkanby</a> &middot; <a href="https://github.com/Serkanbyx">GitHub</a>
-</p>
+## Developer
+
+**Serkanby**
+
+- Website: [serkanbayraktar.com](https://serkanbayraktar.com/)
+- GitHub: [@Serkanbyx](https://github.com/Serkanbyx)
+- Email: [serkanbyx1@gmail.com](mailto:serkanbyx1@gmail.com)
+
+## Contact
+
+- [Open an Issue](https://github.com/Serkanbyx/notes-mern/issues)
+- Email: [serkanbyx1@gmail.com](mailto:serkanbyx1@gmail.com)
+- Website: [serkanbayraktar.com](https://serkanbayraktar.com/)

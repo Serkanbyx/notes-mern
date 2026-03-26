@@ -4,6 +4,7 @@ const helmet = require("helmet");
 const hpp = require("hpp");
 require("dotenv").config();
 
+const { version } = require("./package.json");
 const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const noteRoutes = require("./routes/noteRoutes");
@@ -60,6 +61,17 @@ app.use((req, _res, next) => {
 // ── Routes ───────────────────────────────────────────────────────────
 app.use("/api/auth", authRoutes);
 app.use("/api/notes", noteRoutes);
+
+// ── Health Check ─────────────────────────────────────────────────────
+app.get("/api/health", (_req, res) => {
+  res.json({
+    success: true,
+    status: "healthy",
+    version,
+    uptime: Math.floor(process.uptime()),
+    timestamp: new Date().toISOString(),
+  });
+});
 
 // ── Welcome Page ────────────────────────────────────────────────────
 app.get("/", (_req, res) => {
@@ -174,9 +186,55 @@ app.get("/", (_req, res) => {
     }
     .sign a:hover { color: #fde68a; }
 
+    .version {
+      margin-top: .5rem;
+      font-size: .85rem;
+      color: #94a3b8;
+      letter-spacing: .04em;
+    }
+
+    .links {
+      display: flex;
+      gap: .75rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: .5rem;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: .6rem 1.4rem;
+      border-radius: 10px;
+      font-size: .85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all .25s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #0f172a;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(245,158,11,.35);
+    }
+
+    .btn-secondary {
+      background: rgba(250,204,21,.1);
+      color: #fbbf24;
+      border: 1px solid rgba(250,204,21,.2);
+    }
+    .btn-secondary:hover {
+      background: rgba(250,204,21,.18);
+      transform: translateY(-2px);
+    }
+
     @media (max-width: 480px) {
       .container { padding: 2rem 1.5rem; }
       h1 { font-size: 1.5rem; }
+      .links { flex-direction: column; }
+      .btn { width: 100%; text-align: center; }
     }
   </style>
 </head>
@@ -184,8 +242,12 @@ app.get("/", (_req, res) => {
   <div class="container">
     <div class="icon">📝</div>
     <h1>Notes MERN API</h1>
+    <p class="version">v${version}</p>
     <div class="divider"></div>
     <p class="status">API is <strong>running</strong> and ready for requests.</p>
+    <div class="links">
+      <a href="/api/health" class="btn btn-secondary">Health Check</a>
+    </div>
     <footer class="sign">
       Created by
       <a href="https://serkanbayraktar.com/" target="_blank" rel="noopener noreferrer">Serkanby</a>

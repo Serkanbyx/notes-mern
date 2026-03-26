@@ -8,7 +8,10 @@
     "dev": "node --watch server.js"
   },
   "keywords": [],
-  "author": "",
+  "author": {
+    "name": "Serkanby",
+    "url": "https://serkanbayraktar.com/"
+  },
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {

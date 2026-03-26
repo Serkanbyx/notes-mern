@@ -41,6 +41,28 @@ function App() {
         {/* Catch-all */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+
+      {/* Footer */}
+      <footer className="fixed bottom-0 left-0 w-full py-2 text-center text-xs text-gray-400 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm">
+        Created by{" "}
+        <a
+          href="https://serkanbayraktar.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-500 hover:text-blue-600 transition-colors"
+        >
+          Serkanby
+        </a>
+        {" | "}
+        <a
+          href="https://github.com/Serkanbyx"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-500 hover:text-blue-600 transition-colors"
+        >
+          Github
+        </a>
+      </footer>
     </>
   );
 }
