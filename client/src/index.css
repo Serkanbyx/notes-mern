@@ -1,1 +1,21 @@
 @import 'tailwindcss';
+
+/* React Quill editor overrides inside NoteModal */
+.note-editor .ql-container {
+  min-height: 140px;
+  max-height: 280px;
+  overflow-y: auto;
+  font-size: 14px;
+  border-bottom-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+}
+
+.note-editor .ql-toolbar {
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+}
+
+.note-editor .ql-editor.ql-blank::before {
+  font-style: normal;
+  color: #9ca3af;
+}
