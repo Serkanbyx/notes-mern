@@ -63,7 +63,7 @@ const NoteCard = ({ note, onEdit, onDelete, onTogglePin }) => {
           {getRelativeTime(note.updatedAt)}
         </time>
 
-        <div className="flex gap-1 opacity-0 transition-opacity duration-150 group-hover:opacity-100">
+        <div className="flex gap-1 opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-within:opacity-100">
           <button
             onClick={() => onEdit(note)}
             className="cursor-pointer rounded-md p-1.5 text-gray-500 transition-colors hover:bg-black/5 hover:text-gray-800"

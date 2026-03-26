@@ -1,6 +1,16 @@
 node_modules/
 .env
 dist/
+build/
+
 .DS_Store
 Thumbs.db
+desktop.ini
+
 *.log
+npm-debug.log*
+
+.vscode/
+.idea/
+*.swp
+*.swo

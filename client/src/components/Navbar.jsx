@@ -13,7 +13,10 @@ const Navbar = () => {
   if (!user) return null;
 
   return (
-    <nav className="sticky top-0 z-50 border-b border-gray-200 bg-white/80 backdrop-blur-md">
+    <nav
+      className="sticky top-0 z-50 border-b border-gray-200 bg-white/80 backdrop-blur-md"
+      aria-label="Main navigation"
+    >
       <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4">
         <Link to="/" className="text-lg font-bold text-gray-900 tracking-tight">
           Notes
@@ -27,6 +30,7 @@ const Navbar = () => {
           <button
             onClick={handleLogout}
             className="cursor-pointer rounded-lg bg-gray-900 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-gray-700"
+            aria-label="Log out"
           >
             Logout
           </button>
