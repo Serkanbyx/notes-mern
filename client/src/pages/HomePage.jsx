@@ -5,6 +5,7 @@ import Spinner from "../components/Spinner";
 import SearchBar from "../components/SearchBar";
 import NoteList from "../components/NoteList";
 import NoteModal from "../components/NoteModal";
+import ConfirmDialog from "../components/ConfirmDialog";
 
 const HomePage = () => {
   const [notes, setNotes] = useState([]);
@@ -12,6 +13,8 @@ const HomePage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [editingNote, setEditingNote] = useState(null);
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [deleting, setDeleting] = useState(false);
 
   const fetchNotes = useCallback(async () => {
     try {
@@ -46,13 +49,22 @@ const HomePage = () => {
     }
   };
 
-  const handleDelete = async (noteId) => {
+  const handleDeleteRequest = (noteId) => {
+    setDeleteTarget(noteId);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!deleteTarget) return;
+    setDeleting(true);
     try {
-      await axiosInstance.delete(`/notes/${noteId}`);
-      setNotes((prev) => prev.filter((n) => n._id !== noteId));
+      await axiosInstance.delete(`/notes/${deleteTarget}`);
+      setNotes((prev) => prev.filter((n) => n._id !== deleteTarget));
       toast.success("Note deleted");
+      setDeleteTarget(null);
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to delete note");
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -124,7 +136,7 @@ const HomePage = () => {
       <NoteList
         notes={filteredNotes}
         onEdit={handleEdit}
-        onDelete={handleDelete}
+        onDelete={handleDeleteRequest}
         onTogglePin={handleTogglePin}
         isSearching={searchQuery.length > 0}
       />
@@ -145,6 +157,16 @@ const HomePage = () => {
         onClose={() => setModalOpen(false)}
         note={editingNote}
         onSave={handleSave}
+      />
+
+      {/* Delete confirmation dialog */}
+      <ConfirmDialog
+        isOpen={Boolean(deleteTarget)}
+        onClose={() => setDeleteTarget(null)}
+        onConfirm={handleDeleteConfirm}
+        title="Delete note"
+        message="This note will be permanently deleted. Are you sure?"
+        loading={deleting}
       />
     </main>
   );
