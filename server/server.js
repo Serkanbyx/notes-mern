@@ -13,7 +13,9 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // ── CORS — only allow requests from the frontend origin ─────────────
-const allowedOrigins = [process.env.CLIENT_URL || "http://localhost:5173"];
+const allowedOrigins = (process.env.CLIENT_URL || "http://localhost:5173")
+  .split(",")
+  .map((url) => url.trim());
 
 app.use(
   cors({
@@ -261,12 +263,34 @@ app.get("/", (_req, res) => {
 
 // ── Global Error Handler ────────────────────────────────────────────
 app.use((err, _req, res, _next) => {
-  const statusCode = err.statusCode || 500;
   const isProduction = process.env.NODE_ENV === "production";
+
+  // MongoDB duplicate key (e.g. unique email)
+  if (err.code === 11000) {
+    const field = Object.keys(err.keyPattern || {})[0] || "field";
+    return res.status(409).json({
+      success: false,
+      message: `This ${field} is already in use`,
+      errors: [{ path: field, msg: `This ${field} is already in use` }],
+    });
+  }
+
+  // Mongoose validation errors
+  if (err.name === "ValidationError") {
+    const errors = Object.entries(err.errors).map(([path, e]) => ({
+      path,
+      msg: e.message,
+    }));
+    return res.status(400).json({ success: false, errors });
+  }
+
+  const statusCode = err.statusCode || 500;
 
   res.status(statusCode).json({
     success: false,
-    message: isProduction ? "Something went wrong" : err.message,
+    message: isProduction && statusCode === 500
+      ? "Something went wrong"
+      : err.message,
     ...(isProduction ? {} : { stack: err.stack }),
   });
 });
