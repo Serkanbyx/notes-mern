@@ -24,7 +24,10 @@ const getRelativeTime = (dateString) => {
   return `${months}mo ago`;
 };
 
-const stripHtml = (html) => html.replace(/<[^>]*>/g, "");
+const stripHtml = (html) => {
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  return doc.body.textContent || "";
+};
 
 const NoteCard = ({ note, onEdit, onDelete, onTogglePin }) => {
   const bgColor = COLOR_MAP[note.color] || COLOR_MAP.yellow;
