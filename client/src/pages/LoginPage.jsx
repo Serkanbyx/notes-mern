@@ -198,6 +198,15 @@ const LoginPage = () => {
             )}
           </div>
 
+          <div className="flex items-center justify-between">
+            <Link
+              to="/forgot-password"
+              className="text-xs font-medium text-gray-500 hover:text-gray-900 transition-colors"
+            >
+              Forgot password?
+            </Link>
+          </div>
+
           <button
             type="submit"
             disabled={loading}

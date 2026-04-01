@@ -1,5 +1,11 @@
 const express = require("express");
 const verifyToken = require("../middleware/verifyToken");
+const checkNoteOwnership = require("../middleware/checkNoteOwnership");
+const {
+  objectIdValidator,
+  createNoteValidator,
+  updateNoteValidator,
+} = require("../validators/noteValidator");
 const {
   getAllNotes,
   getNoteById,
@@ -11,14 +17,13 @@ const {
 
 const router = express.Router();
 
-// All note routes require authentication
 router.use(verifyToken);
 
 router.get("/", getAllNotes);
-router.get("/:id", getNoteById);
-router.post("/", createNote);
-router.put("/:id", updateNote);
-router.patch("/:id/pin", togglePin);
-router.delete("/:id", deleteNote);
+router.get("/:id", objectIdValidator, checkNoteOwnership, getNoteById);
+router.post("/", createNoteValidator, createNote);
+router.put("/:id", updateNoteValidator, checkNoteOwnership, updateNote);
+router.patch("/:id/pin", objectIdValidator, checkNoteOwnership, togglePin);
+router.delete("/:id", objectIdValidator, checkNoteOwnership, deleteNote);
 
 module.exports = router;

@@ -5,6 +5,8 @@ import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 import HomePage from "./pages/HomePage";
 
 function App() {
@@ -31,6 +33,18 @@ function App() {
         <Route
           path="/register"
           element={token ? <Navigate to="/" replace /> : <RegisterPage />}
+        />
+        <Route
+          path="/forgot-password"
+          element={
+            token ? <Navigate to="/" replace /> : <ForgotPasswordPage />
+          }
+        />
+        <Route
+          path="/reset-password/:token"
+          element={
+            token ? <Navigate to="/" replace /> : <ResetPasswordPage />
+          }
         />
 
         {/* Protected routes */}

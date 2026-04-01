@@ -1,3 +1,4 @@
+const { validationResult } = require("express-validator");
 const Note = require("../models/Note");
 
 // @desc    Get all notes for authenticated user
@@ -17,32 +18,19 @@ const getAllNotes = async (req, res, next) => {
 
 // @desc    Get single note by ID
 // @route   GET /api/notes/:id
-const getNoteById = async (req, res, next) => {
-  try {
-    const note = await Note.findById(req.params.id);
-
-    if (!note) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Note not found" });
-    }
-
-    if (note.userId.toString() !== req.user.userId) {
-      return res
-        .status(403)
-        .json({ success: false, message: "Not authorized to access this note" });
-    }
-
-    res.status(200).json({ success: true, note });
-  } catch (error) {
-    next(error);
-  }
+const getNoteById = async (req, res) => {
+  res.status(200).json({ success: true, note: req.note });
 };
 
 // @desc    Create a new note
 // @route   POST /api/notes
 const createNote = async (req, res, next) => {
   try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ success: false, errors: errors.array() });
+    }
+
     const { title, content, color } = req.body;
 
     const note = await Note.create({
@@ -62,20 +50,7 @@ const createNote = async (req, res, next) => {
 // @route   PUT /api/notes/:id
 const updateNote = async (req, res, next) => {
   try {
-    const note = await Note.findById(req.params.id);
-
-    if (!note) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Note not found" });
-    }
-
-    if (note.userId.toString() !== req.user.userId) {
-      return res
-        .status(403)
-        .json({ success: false, message: "Not authorized to update this note" });
-    }
-
+    const { note } = req;
     const { title, content, color } = req.body;
 
     note.title = title ?? note.title;
@@ -94,19 +69,7 @@ const updateNote = async (req, res, next) => {
 // @route   PATCH /api/notes/:id/pin
 const togglePin = async (req, res, next) => {
   try {
-    const note = await Note.findById(req.params.id);
-
-    if (!note) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Note not found" });
-    }
-
-    if (note.userId.toString() !== req.user.userId) {
-      return res
-        .status(403)
-        .json({ success: false, message: "Not authorized to update this note" });
-    }
+    const { note } = req;
 
     note.isPinned = !note.isPinned;
     const updatedNote = await note.save();
@@ -121,21 +84,7 @@ const togglePin = async (req, res, next) => {
 // @route   DELETE /api/notes/:id
 const deleteNote = async (req, res, next) => {
   try {
-    const note = await Note.findById(req.params.id);
-
-    if (!note) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Note not found" });
-    }
-
-    if (note.userId.toString() !== req.user.userId) {
-      return res
-        .status(403)
-        .json({ success: false, message: "Not authorized to delete this note" });
-    }
-
-    await note.deleteOne();
+    await req.note.deleteOne();
 
     res.status(200).json({ success: true, message: "Note deleted" });
   } catch (error) {

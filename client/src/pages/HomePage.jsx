@@ -1,65 +1,37 @@
-import { useState, useEffect, useCallback } from "react";
-import axiosInstance from "../api/axiosInstance";
+import { useState } from "react";
 import toast from "react-hot-toast";
+import useNotes from "../hooks/useNotes";
 import Spinner from "../components/Spinner";
 import SearchBar from "../components/SearchBar";
 import NoteList from "../components/NoteList";
 import NoteModal from "../components/NoteModal";
 import ConfirmDialog from "../components/ConfirmDialog";
 
+const stripHtml = (html) => html.replace(/<[^>]*>/g, "");
+
 const HomePage = () => {
-  const [notes, setNotes] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { notes, loading, createNote, updateNote, deleteNote, togglePin } =
+    useNotes();
+
   const [searchQuery, setSearchQuery] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [editingNote, setEditingNote] = useState(null);
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleting, setDeleting] = useState(false);
 
-  const fetchNotes = useCallback(async () => {
-    try {
-      setLoading(true);
-      const { data } = await axiosInstance.get("/notes");
-      setNotes(data.notes);
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to fetch notes");
-    } finally {
-      setLoading(false);
+  const handleSave = async ({ title, content, color }) => {
+    if (editingNote) {
+      await updateNote(editingNote._id, { title, content, color });
+    } else {
+      await createNote({ title, content, color });
     }
-  }, []);
-
-  useEffect(() => {
-    fetchNotes();
-  }, [fetchNotes]);
-
-  const handleTogglePin = async (noteId) => {
-    try {
-      const { data } = await axiosInstance.patch(`/notes/${noteId}/pin`);
-      setNotes((prev) =>
-        prev
-          .map((n) => (n._id === noteId ? data.note : n))
-          .sort((a, b) => {
-            if (a.isPinned !== b.isPinned) return b.isPinned ? 1 : -1;
-            return new Date(b.updatedAt) - new Date(a.updatedAt);
-          }),
-      );
-      toast.success(data.note.isPinned ? "Note pinned" : "Note unpinned");
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to toggle pin");
-    }
-  };
-
-  const handleDeleteRequest = (noteId) => {
-    setDeleteTarget(noteId);
   };
 
   const handleDeleteConfirm = async () => {
     if (!deleteTarget) return;
     setDeleting(true);
     try {
-      await axiosInstance.delete(`/notes/${deleteTarget}`);
-      setNotes((prev) => prev.filter((n) => n._id !== deleteTarget));
-      toast.success("Note deleted");
+      await deleteNote(deleteTarget);
       setDeleteTarget(null);
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to delete note");
@@ -77,40 +49,6 @@ const HomePage = () => {
     setEditingNote(note);
     setModalOpen(true);
   };
-
-  const handleSave = async ({ title, content, color }) => {
-    if (editingNote) {
-      const { data } = await axiosInstance.put(`/notes/${editingNote._id}`, {
-        title,
-        content,
-        color,
-      });
-      setNotes((prev) =>
-        prev
-          .map((n) => (n._id === editingNote._id ? data.note : n))
-          .sort((a, b) => {
-            if (a.isPinned !== b.isPinned) return b.isPinned ? 1 : -1;
-            return new Date(b.updatedAt) - new Date(a.updatedAt);
-          }),
-      );
-      toast.success("Note updated");
-    } else {
-      const { data } = await axiosInstance.post("/notes", {
-        title,
-        content,
-        color,
-      });
-      setNotes((prev) =>
-        [data.note, ...prev].sort((a, b) => {
-          if (a.isPinned !== b.isPinned) return b.isPinned ? 1 : -1;
-          return new Date(b.updatedAt) - new Date(a.updatedAt);
-        }),
-      );
-      toast.success("Note created");
-    }
-  };
-
-  const stripHtml = (html) => html.replace(/<[^>]*>/g, "");
 
   const filteredNotes = searchQuery
     ? notes.filter((note) => {
@@ -136,12 +74,11 @@ const HomePage = () => {
       <NoteList
         notes={filteredNotes}
         onEdit={handleEdit}
-        onDelete={handleDeleteRequest}
-        onTogglePin={handleTogglePin}
+        onDelete={setDeleteTarget}
+        onTogglePin={togglePin}
         isSearching={searchQuery.length > 0}
       />
 
-      {/* Floating Action Button */}
       <button
         onClick={openCreateModal}
         className="fixed right-6 bottom-6 z-40 flex h-14 w-14 cursor-pointer items-center justify-center rounded-full bg-gray-900 text-white shadow-lg transition-all duration-200 hover:scale-105 hover:bg-gray-800 active:scale-95"
@@ -151,7 +88,6 @@ const HomePage = () => {
         <PlusIcon />
       </button>
 
-      {/* Create / Edit modal */}
       <NoteModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
@@ -159,7 +95,6 @@ const HomePage = () => {
         onSave={handleSave}
       />
 
-      {/* Delete confirmation dialog */}
       <ConfirmDialog
         isOpen={Boolean(deleteTarget)}
         onClose={() => setDeleteTarget(null)}
