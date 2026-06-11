@@ -4,9 +4,9 @@ import { describe, it, expect, vi } from "vitest";
 import ColorPicker from "../components/ColorPicker";
 
 describe("ColorPicker", () => {
-  const colors = ["yellow", "green", "blue", "purple", "pink", "orange"];
+  const colors = ["yellow", "green", "blue", "purple", "pink", "red", "orange"];
 
-  it("renders all 6 color buttons", () => {
+  it("renders all 7 color buttons", () => {
     render(<ColorPicker selectedColor="yellow" onSelect={() => {}} />);
 
     colors.forEach((color) => {

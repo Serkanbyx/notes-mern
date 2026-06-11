@@ -4,6 +4,7 @@ const COLORS = [
   { name: "blue", value: "#bbdefb" },
   { name: "purple", value: "#e1bee7" },
   { name: "pink", value: "#f8bbd0" },
+  { name: "red", value: "#ffcdd2" },
   { name: "orange", value: "#ffe0b2" },
 ];
 

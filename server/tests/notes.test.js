@@ -107,6 +107,20 @@ describe("POST /api/notes", () => {
 
     expect(res.status).toBe(400);
   });
+
+  it("should strip unsafe HTML from content (XSS protection)", async () => {
+    const res = await request(app)
+      .post("/api/notes")
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        title: "XSS Test",
+        content: '<p>Safe <strong>text</strong></p><script>alert("xss")</script>',
+      });
+
+    expect(res.status).toBe(201);
+    expect(res.body.note.content).not.toContain("<script>");
+    expect(res.body.note.content).toContain("<strong>text</strong>");
+  });
 });
 
 describe("PUT /api/notes/:id", () => {

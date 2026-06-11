@@ -1,5 +1,5 @@
-const { validationResult } = require("express-validator");
 const Note = require("../models/Note");
+const sanitizeContent = require("../utils/sanitizeContent");
 
 // @desc    Get all notes for authenticated user
 // @route   GET /api/notes
@@ -26,16 +26,11 @@ const getNoteById = async (req, res) => {
 // @route   POST /api/notes
 const createNote = async (req, res, next) => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ success: false, errors: errors.array() });
-    }
-
     const { title, content, color } = req.body;
 
     const note = await Note.create({
       title,
-      content,
+      content: sanitizeContent(content),
       color,
       userId: req.user.userId,
     });
@@ -54,7 +49,7 @@ const updateNote = async (req, res, next) => {
     const { title, content, color } = req.body;
 
     note.title = title ?? note.title;
-    note.content = content ?? note.content;
+    note.content = content !== undefined ? sanitizeContent(content) : note.content;
     note.color = color ?? note.color;
 
     const updatedNote = await note.save();

@@ -90,16 +90,20 @@ Make sure you have the following installed:
 
 ```bash
 # Clone your fork
-git clone https://github.com/YOUR_USERNAME/REPOSITORY_NAME.git
+git clone https://github.com/YOUR_USERNAME/notes-mern.git
 
 # Navigate to project directory
-cd REPOSITORY_NAME
+cd notes-mern
 
-# Install dependencies (if applicable)
-# npm install / pip install -r requirements.txt / etc.
+# Install backend dependencies
+cd server && npm install
 
-# Start development server (if applicable)
-# npm start / python app.py / etc.
+# Install frontend dependencies
+cd ../client && npm install
+
+# Start development servers (in separate terminals)
+cd server && npm run dev
+cd client && npm run dev
 ```
 
 ## Style Guidelines

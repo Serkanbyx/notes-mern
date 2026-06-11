@@ -1,7 +1,6 @@
 const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { validationResult } = require("express-validator");
 const User = require("../models/User");
 const { sendEmail, buildResetEmailHtml } = require("../utils/sendEmail");
 
@@ -12,11 +11,6 @@ const generateToken = (userId) =>
 // @route   POST /api/auth/register
 const register = async (req, res, next) => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ success: false, errors: errors.array() });
-    }
-
     const { name, email, password } = req.body;
 
     const existingUser = await User.findOne({ email });
@@ -50,11 +44,6 @@ const register = async (req, res, next) => {
 // @route   POST /api/auth/login
 const login = async (req, res, next) => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ success: false, errors: errors.array() });
-    }
-
     const { email, password } = req.body;
 
     const user = await User.findOne({ email }).select("+password");
@@ -87,11 +76,6 @@ const login = async (req, res, next) => {
 // @route   POST /api/auth/forgot-password
 const forgotPassword = async (req, res, next) => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ success: false, errors: errors.array() });
-    }
-
     const { email } = req.body;
 
     const user = await User.findOne({ email }).select(
@@ -144,11 +128,6 @@ const forgotPassword = async (req, res, next) => {
 // @route   POST /api/auth/reset-password/:token
 const resetPassword = async (req, res, next) => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ success: false, errors: errors.array() });
-    }
-
     const hashedToken = crypto
       .createHash("sha256")
       .update(req.params.token)

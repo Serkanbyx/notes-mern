@@ -1,5 +1,6 @@
 const express = require("express");
 const rateLimit = require("express-rate-limit");
+const handleValidation = require("../middleware/handleValidation");
 const {
   register,
   login,
@@ -26,18 +27,26 @@ const authLimiter = rateLimit({
   legacyHeaders: false,
 });
 
-router.post("/register", authLimiter, registerValidator, register);
-router.post("/login", authLimiter, loginValidator, login);
+router.post(
+  "/register",
+  authLimiter,
+  registerValidator,
+  handleValidation,
+  register,
+);
+router.post("/login", authLimiter, loginValidator, handleValidation, login);
 router.post(
   "/forgot-password",
   authLimiter,
   forgotPasswordValidator,
+  handleValidation,
   forgotPassword,
 );
 router.post(
   "/reset-password/:token",
   authLimiter,
   resetPasswordValidator,
+  handleValidation,
   resetPassword,
 );
 

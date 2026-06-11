@@ -1,17 +1,12 @@
-const { validationResult } = require("express-validator");
 const Note = require("../models/Note");
 
 /**
- * Validates request params, finds the note by ID, and verifies
- * the authenticated user owns it. Attaches `req.note` on success.
+ * Finds the note by ID and verifies the authenticated user owns it.
+ * Attaches `req.note` on success. Param validation runs earlier via
+ * the validator chain + handleValidation middleware.
  */
 const checkNoteOwnership = async (req, res, next) => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ success: false, errors: errors.array() });
-    }
-
     const note = await Note.findById(req.params.id);
 
     if (!note) {

@@ -39,6 +39,9 @@ app.use(express.json({ limit: "10kb" }));
 app.use(express.urlencoded({ extended: true, limit: "10kb" }));
 
 // ── NoSQL Injection Sanitizer (Express 5 compatible)
+// Strips keys containing MongoDB operators ($) or dot-paths (.) from the
+// request body. Scoped to req.body only — all user input reaches this API
+// through JSON payloads, and mutating req.headers/req.query is unsafe.
 app.use((req, _res, next) => {
   const sanitize = (obj) => {
     if (!obj || typeof obj !== "object") return obj;
@@ -52,7 +55,6 @@ app.use((req, _res, next) => {
     return obj;
   };
   if (req.body) sanitize(req.body);
-  if (req.headers) sanitize(req.headers);
   next();
 });
 
