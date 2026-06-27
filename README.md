@@ -23,8 +23,13 @@
     <a href="#features">Features</a> •
     <a href="#installation">Quick Start</a> •
     <a href="#api-endpoints">API Docs</a> •
+    <a href="#screenshots">Screenshots</a> •
     <a href="#architecture">Architecture</a>
   </p>
+
+  <a href="https://notes-mernn.netlify.app/">
+    <img src="./assets/screenshots/notes-dashboard.png" alt="Notes MERN dashboard with color-coded note cards" width="720" />
+  </a>
 
 </div>
 
@@ -52,6 +57,57 @@
 [🚀 View Live Demo](https://notes-mernn.netlify.app/)
 
 > The frontend is hosted on Netlify and the API on Render. Render free-tier instances sleep when idle, so the first request after inactivity may take a few seconds to wake the server.
+
+---
+
+## Screenshots
+
+All screenshots are captured from the [live deployment](https://notes-mernn.netlify.app/) using a demo account with seeded notes.
+
+<table>
+  <tr>
+    <td align="center" width="33%">
+      <a href="./assets/screenshots/login.png"><img src="./assets/screenshots/login.png" alt="Login page" width="100%" /></a>
+      <sub><b>Login</b><br/>Secure sign-in with JWT</sub>
+    </td>
+    <td align="center" width="33%">
+      <a href="./assets/screenshots/register.png"><img src="./assets/screenshots/register.png" alt="Register page" width="100%" /></a>
+      <sub><b>Register</b><br/>Create a new account</sub>
+    </td>
+    <td align="center" width="33%">
+      <a href="./assets/screenshots/forgot-password.png"><img src="./assets/screenshots/forgot-password.png" alt="Forgot password page" width="100%" /></a>
+      <sub><b>Reset</b><br/>Email-based password recovery</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="33%">
+      <a href="./assets/screenshots/notes-dashboard.png"><img src="./assets/screenshots/notes-dashboard.png" alt="Notes dashboard" width="100%" /></a>
+      <sub><b>Dashboard</b><br/>Color-coded notes grid</sub>
+    </td>
+    <td align="center" width="33%">
+      <a href="./assets/screenshots/create-note.png"><img src="./assets/screenshots/create-note.png" alt="Create note modal" width="100%" /></a>
+      <sub><b>Editor</b><br/>Rich text + color picker</sub>
+    </td>
+    <td align="center" width="33%">
+      <a href="./assets/screenshots/search-notes.png"><img src="./assets/screenshots/search-notes.png" alt="Search notes" width="100%" /></a>
+      <sub><b>Search</b><br/>Instant client-side filtering</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="33%">
+      <a href="./assets/screenshots/pinned-notes.png"><img src="./assets/screenshots/pinned-notes.png" alt="Pinned notes with actions" width="100%" /></a>
+      <sub><b>Pin</b><br/>Pinned notes stay on top</sub>
+    </td>
+    <td align="center" width="33%">
+      <a href="./assets/screenshots/edit-note.png"><img src="./assets/screenshots/edit-note.png" alt="Edit note modal" width="100%" /></a>
+      <sub><b>Edit</b><br/>Update title, content & color</sub>
+    </td>
+    <td align="center" width="33%">
+      <a href="./assets/screenshots/delete-confirm.png"><img src="./assets/screenshots/delete-confirm.png" alt="Delete confirmation dialog" width="100%" /></a>
+      <sub><b>Delete</b><br/>Confirmation before removal</sub>
+    </td>
+  </tr>
+</table>
 
 ---
 
@@ -339,6 +395,8 @@ client/
 notes-mern/
 ├── client/          # → see Client panel above
 ├── server/          # → see Server panel above
+├── assets/          # README screenshots captured from live deployment
+│   └── screenshots/
 ├── .github/         # issue templates, PR template, CODE_OF_CONDUCT, CONTRIBUTING, SECURITY
 ├── docs/            # build-guide.md — original step-by-step build playbook
 ├── render.yaml      # Render deployment blueprint
