@@ -1,0 +1,12 @@
+# Monorepo deploy config — the frontend lives in client/.
+# `publish` is resolved relative to `base`, so this publishes client/dist.
+[build]
+  base = "client"
+  command = "npm run build"
+  publish = "dist"
+
+# SPA fallback — let React Router handle all client-side routes.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

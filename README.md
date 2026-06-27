@@ -284,7 +284,7 @@ Base URL: `/api`
 
 ## Project Structure
 
-A clean monorepo layout with an explicit backend / frontend split. Each panel below is collapsible — expand the one you care about.
+A clean monorepo layout with an explicit backend / frontend split. Each panel below is collapsible — expand the one you care about. For the original step-by-step roadmap, see the [Build Guide](docs/build-guide.md).
 
 <details open>
 <summary><b>Server</b> — Express 5 API</summary>
@@ -325,7 +325,6 @@ client/
 │   ├── App.jsx      # routes + Toaster + Navbar
 │   ├── main.jsx     # entry: BrowserRouter + AuthProvider
 │   └── index.css    # Tailwind import + Quill overrides
-├── netlify.toml     # SPA redirect config
 ├── vite.config.js   # React + Tailwind v4 + Vitest config
 ├── .env.example
 └── package.json
@@ -341,7 +340,9 @@ notes-mern/
 ├── client/          # → see Client panel above
 ├── server/          # → see Server panel above
 ├── .github/         # issue templates, PR template, CODE_OF_CONDUCT, CONTRIBUTING, SECURITY
+├── docs/            # build-guide.md — original step-by-step build playbook
 ├── render.yaml      # Render deployment blueprint
+├── netlify.toml     # Netlify monorepo build + SPA redirect config
 ├── .gitignore
 ├── LICENSE
 └── README.md
@@ -389,10 +390,10 @@ A `render.yaml` blueprint is included for automatic setup. Configure these envir
 | -------------------- | ---------------------------------------------- |
 | Base directory       | `client`                                       |
 | Build command        | `npm run build`                                |
-| Publish directory    | `dist`                                         |
+| Publish directory    | `client/dist`                                  |
 | Environment variable | `VITE_API_URL=https://your-api.onrender.com/api` |
 
-> SPA routing is handled by the included `netlify.toml`.
+> Build settings and SPA routing are defined in the root `netlify.toml` (`base = "client"`, `publish = "dist"`), which takes precedence over the dashboard. In the Netlify UI the publish directory is shown relative to the repo root as `client/dist`.
 
 ---
 
